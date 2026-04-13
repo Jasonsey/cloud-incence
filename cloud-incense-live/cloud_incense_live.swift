@@ -28,6 +28,15 @@ struct BurnActivityAttributes: ActivityAttributes {
 
 // MARK: - Helpers
 
+/// Returns localized display text for a given phase key.
+func localizedPhase(_ phase: String) -> String {
+    switch phase {
+    case "burning": return String(localized: "phase_burning")
+    case "complete": return String(localized: "phase_complete")
+    default: return phase
+    }
+}
+
 /// Calculates burn progress as a percentage (0.0 to 1.0)
 func calculateBurnProgress(startDate: Date, endDate: Date) -> Double {
     let elapsed = Date().timeIntervalSince(startDate)
@@ -53,11 +62,11 @@ struct BurnLockScreenView: View {
     
     private var displayPhase: String {
         switch context.state.phase {
-        case "燃烧中":
+        case "burning":
             let remainingPercent = Int((1 - progress) * 100)
-            return "燃烧中 (\(remainingPercent)%)"
+            return String(format: String(localized: "burning_progress_format"), remainingPercent)
         default:
-            return "已完成"
+            return String(localized: "phase_complete")
         }
     }
 
@@ -73,13 +82,13 @@ struct BurnLockScreenView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
                     
-                    if context.state.phase == "燃烧中" {
+                    if context.state.phase == "burning" {
                         // Progress bar with percentage
                         ProgressView(value: progress)
                             .frame(height: 4)
                             .tint(.orange)
                     } else {
-                        Text("心愿已达天听")
+                        Text("prayer_heard")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -89,7 +98,7 @@ struct BurnLockScreenView: View {
             }
             
             // Prayer summary if available
-            if !context.state.prayerSummary.isEmpty && context.state.phase == "燃烧中" {
+            if !context.state.prayerSummary.isEmpty && context.state.phase == "burning" {
                 Text(truncatePrayer(context.state.prayerSummary))
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -118,17 +127,17 @@ struct BurnLiveActivity: Widget {
             return DynamicIsland {
                 // Expanded island
                 DynamicIslandExpandedRegion(.leading) {
-                    Label("云烟", systemImage: "flame.fill")
+                    Label(String(localized: "app_name"), systemImage: "flame.fill")
                         .foregroundStyle(.orange)
                         .font(.caption)
                 }
                 
                 DynamicIslandExpandedRegion(.center) {
                     VStack(spacing: 4) {
-                        Text(context.state.phase)
+                        Text(localizedPhase(context.state.phase))
                             .font(.caption.weight(.semibold))
                         
-                        if context.state.phase == "燃烧中" {
+                        if context.state.phase == "burning" {
                             // Progress bar in expanded view
                             ProgressView(value: progress)
                                 .tint(.orange)
@@ -138,7 +147,7 @@ struct BurnLiveActivity: Widget {
                 }
                 
                 DynamicIslandExpandedRegion(.trailing) {
-                    if context.state.phase == "燃烧中" {
+                    if context.state.phase == "burning" {
                         let percent = Int(progress * 100)
                         Text("\(percent)%")
                             .font(.caption.weight(.semibold))
@@ -150,8 +159,8 @@ struct BurnLiveActivity: Widget {
                 }
                 
                 DynamicIslandExpandedRegion(.bottom) {
-                    if !context.state.prayerSummary.isEmpty && context.state.phase == "燃烧中" {
-                        Text("正在祈祷："  + truncatePrayer(context.state.prayerSummary, maxLength: 40))
+                    if !context.state.prayerSummary.isEmpty && context.state.phase == "burning" {
+                        Text(String(format: String(localized: "praying_format"), truncatePrayer(context.state.prayerSummary, maxLength: 40)))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
@@ -163,7 +172,7 @@ struct BurnLiveActivity: Widget {
                     .foregroundStyle(.orange)
                     .font(.caption2)
             } compactTrailing: {
-                if context.state.phase == "燃烧中" {
+                if context.state.phase == "burning" {
                     let percent = Int(progress * 100)
                     Text("\(percent)%")
                         .font(.caption2.weight(.semibold))
@@ -193,7 +202,7 @@ extension BurnActivityAttributes {
 extension BurnActivityAttributes.ContentState {
     fileprivate static var burning: BurnActivityAttributes.ContentState {
         .init(
-            phase: "燃烧中",
+            phase: "burning",
             endDate: Date().addingTimeInterval(1260),
             startDate: Date().addingTimeInterval(-300),
             prayerSummary: "祈愿世界和平"
@@ -201,7 +210,7 @@ extension BurnActivityAttributes.ContentState {
     }
     fileprivate static var complete: BurnActivityAttributes.ContentState {
         .init(
-            phase: "已完成",
+            phase: "complete",
             endDate: Date(),
             startDate: Date().addingTimeInterval(-1260),
             prayerSummary: "祈愿世界和平"

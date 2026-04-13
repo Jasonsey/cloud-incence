@@ -21,7 +21,7 @@ struct BurnActivityAttributes: ActivityAttributes {
     /// ContentState is updated throughout the burn session.
     struct ContentState: Codable, Hashable {
         /// Human-readable phase shown to the user.
-        var phase: String     // "燃烧中" | "已完成"
+        var phase: String     // "burning" | "complete"
         /// When the burn session ends; used by the system for countdown.
         var endDate: Date
         /// Start date of the burn session; used to calculate progress percentage.

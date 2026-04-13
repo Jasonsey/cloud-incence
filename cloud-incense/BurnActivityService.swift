@@ -31,7 +31,7 @@ final class BurnActivityService {
         
         let attrs = BurnActivityAttributes()
         let state = BurnActivityAttributes.ContentState(
-            phase: "燃烧中",
+            phase: "burning",
             endDate: endDate,
             startDate: startDate,
             prayerSummary: truncatedPrayer
@@ -51,7 +51,7 @@ final class BurnActivityService {
         Task {
             for activity in Activity<BurnActivityAttributes>.activities {
                 let state = BurnActivityAttributes.ContentState(
-                    phase: "已完成",
+                    phase: "complete",
                     endDate: Date(),
                     startDate: Date(),
                     prayerSummary: ""

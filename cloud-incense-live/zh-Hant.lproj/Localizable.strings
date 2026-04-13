@@ -1,0 +1,17 @@
+/* App name shown in Live Activity */
+"app_name" = "雲香";
+
+/* Short burning phase label */
+"phase_burning" = "燃燒中";
+
+/* Short complete phase label */
+"phase_complete" = "已完成";
+
+/* Burning phase with remaining percentage. %d = remaining percent */
+"burning_progress_format" = "燃燒中（剩餘 %d%%）";
+
+/* Shown when prayer is complete */
+"prayer_heard" = "心願已達天聽";
+
+/* Prefix shown before prayer summary. %@ = prayer text */
+"praying_format" = "正在祈禱：%@";

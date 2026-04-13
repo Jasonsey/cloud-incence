@@ -1,0 +1,17 @@
+/* App name shown in Live Activity */
+"app_name" = "Incense";
+
+/* Short burning phase label */
+"phase_burning" = "Burning";
+
+/* Short complete phase label */
+"phase_complete" = "Complete";
+
+/* Burning phase with remaining percentage. %d = remaining percent */
+"burning_progress_format" = "Burning (%d%% left)";
+
+/* Shown when prayer is complete */
+"prayer_heard" = "Your prayer has been heard";
+
+/* Prefix shown before prayer summary. %@ = prayer text */
+"praying_format" = "Praying: %@";

@@ -1,0 +1,17 @@
+/* App name shown in Live Activity */
+"app_name" = "인센스";
+
+/* Short burning phase label */
+"phase_burning" = "연소 중";
+
+/* Short complete phase label */
+"phase_complete" = "완료";
+
+/* Burning phase with remaining percentage. %d = remaining percent */
+"burning_progress_format" = "연소 중（%d%% 남음）";
+
+/* Shown when prayer is complete */
+"prayer_heard" = "기도가 하늘에 닿았습니다";
+
+/* Prefix shown before prayer summary. %@ = prayer text */
+"praying_format" = "기도 중: %@";
