@@ -24,8 +24,8 @@ private struct CalloutBubble: Shape {
     var tailPointsUp: Bool
     var tailNormX: CGFloat = 0.5
     var cornerRadius: CGFloat = 16
-    var tailWidth: CGFloat = 18
-    var tailHeight: CGFloat = 12
+    var tailWidth: CGFloat = 24
+    var tailHeight: CGFloat = 16
 
     func path(in rect: CGRect) -> Path {
         let cr = cornerRadius
@@ -92,32 +92,33 @@ private struct BubbleCard: View {
     let hasTail: Bool
     let onNext: () -> Void
 
-    private let tailH: CGFloat = 12
+    private let tailH: CGFloat = 16
 
     var body: some View {
-        VStack(spacing: 16) {
-            VStack(spacing: 8) {
+        VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 Text(title)
-                    .font(.system(size: 19, weight: .semibold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                    .shadow(color: .white.opacity(0.45), radius: 8)
+                    .shadow(color: .white.opacity(0.9), radius: 6)
+                    .shadow(color: .white.opacity(0.5), radius: 18)
 
                 Text(description)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .font(.system(size: 15))
+                    .foregroundStyle(.white.opacity(0.85))
                     .multilineTextAlignment(.center)
-                    .lineSpacing(4)
+                    .lineSpacing(5)
             }
 
-            VStack(spacing: 12) {
-                HStack(spacing: 6) {
+            VStack(spacing: 14) {
+                HStack(spacing: 7) {
                     ForEach(0..<totalSteps, id: \.self) { i in
                         Circle()
-                            .fill(Color.white.opacity(i == currentStep ? 1 : 0.25))
-                            .frame(width: i == currentStep ? 7 : 4,
-                                   height: i == currentStep ? 7 : 4)
-                            .shadow(color: .white.opacity(i == currentStep ? 0.75 : 0), radius: 4)
+                            .fill(Color.white.opacity(i == currentStep ? 1 : 0.3))
+                            .frame(width: i == currentStep ? 8 : 5,
+                                   height: i == currentStep ? 8 : 5)
+                            .shadow(color: .white.opacity(i == currentStep ? 1 : 0), radius: 5)
                     }
                 }
 
@@ -129,39 +130,40 @@ private struct BubbleCard: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 13)
-                        .overlay(Capsule().stroke(Color.white.opacity(0.6), lineWidth: 1))
-                        .shadow(color: .white.opacity(0.7), radius: 5)
-                        .shadow(color: .white.opacity(0.2), radius: 12)
+                        .overlay(Capsule().stroke(Color.white.opacity(0.85), lineWidth: 1.5))
+                        .shadow(color: .white.opacity(0.8), radius: 6)
+                        .shadow(color: .white.opacity(0.35), radius: 16)
                 }
                 .buttonStyle(.plain)
             }
         }
-        .padding(22)
+        .padding(24)
         // Reserve space for the tail so the callout shape fills correctly
         .padding(.top, hasTail && tailPointsUp ? tailH : 0)
         .padding(.bottom, hasTail && !tailPointsUp ? tailH : 0)
         .background(bubbleBackground)
         .overlay(bubbleStroke)
-        .shadow(color: .white.opacity(0.06), radius: 24)
+        .shadow(color: .white.opacity(0.22), radius: 20)
+        .shadow(color: .white.opacity(0.08), radius: 40)
     }
 
     @ViewBuilder private var bubbleBackground: some View {
         if hasTail {
             CalloutBubble(tailPointsUp: tailPointsUp)
-                .fill(Color.white.opacity(0.07))
+                .fill(Color.white.opacity(0.13))
         } else {
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white.opacity(0.07))
+                .fill(Color.white.opacity(0.13))
         }
     }
 
     @ViewBuilder private var bubbleStroke: some View {
         if hasTail {
             CalloutBubble(tailPointsUp: tailPointsUp)
-                .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                .stroke(Color.white.opacity(0.55), lineWidth: 1.5)
         } else {
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                .stroke(Color.white.opacity(0.55), lineWidth: 1.5)
         }
     }
 }
@@ -186,7 +188,7 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.72).ignoresSafeArea()
+            Color.black.opacity(0.82).ignoresSafeArea()
 
             GeometryReader { geo in
                 ZStack {
@@ -212,8 +214,8 @@ struct OnboardingView: View {
 
     private func positionedBubble(_ step: TutorialStep, geo: GeometryProxy) -> some View {
         let bubbleW: CGFloat = min(geo.size.width - 56, 300)
-        // Total estimated frame height: body content (~215pt) + tail (12pt)
-        let frameH: CGFloat = 227
+        // Total estimated frame height: body content (~220pt) + tail (16pt)
+        let frameH: CGFloat = 236
 
         let (centerX, centerY, tailPointsUp): (CGFloat, CGFloat, Bool) = {
             guard let target = step.target else {
