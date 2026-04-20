@@ -24,13 +24,8 @@ private struct CalloutBubble: Shape {
     var tailPointsUp: Bool
     var tailNormX: CGFloat = 0.5
     var cornerRadius: CGFloat = 16
-<<<<<<< ours
     var tailWidth: CGFloat = 18
     var tailHeight: CGFloat = 12
-=======
-    var tailWidth: CGFloat = 26
-    var tailHeight: CGFloat = 18
->>>>>>> theirs
 
     func path(in rect: CGRect) -> Path {
         let cr = cornerRadius
@@ -97,11 +92,7 @@ private struct BubbleCard: View {
     let hasTail: Bool
     let onNext: () -> Void
 
-<<<<<<< ours
     private let tailH: CGFloat = 12
-=======
-    private let tailH: CGFloat = 18
->>>>>>> theirs
 
     var body: some View {
         VStack(spacing: 16) {
@@ -161,8 +152,6 @@ private struct BubbleCard: View {
         } else {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.white.opacity(0.07))
-<<<<<<< ours
-=======
         }
     }
 
@@ -173,42 +162,6 @@ private struct BubbleCard: View {
         } else {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.white.opacity(0.15), lineWidth: 1)
->>>>>>> theirs
-        }
-    }
-}
-
-<<<<<<< ours
-    @ViewBuilder private var bubbleStroke: some View {
-        if hasTail {
-            CalloutBubble(tailPointsUp: tailPointsUp)
-                .stroke(Color.white.opacity(0.15), lineWidth: 1)
-        } else {
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white.opacity(0.15), lineWidth: 1)
-=======
-// MARK: - Bouncing Arrow Indicator
-
-private struct BouncingArrow: View {
-    let pointsUp: Bool
-    @State private var bounce = false
-
-    var body: some View {
-        VStack(spacing: 3) {
-            ForEach(0..<2, id: \.self) { i in
-                Image(systemName: pointsUp ? "chevron.up" : "chevron.down")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white.opacity(i == 0 ? 0.95 : 0.4))
-            }
-        }
-        .shadow(color: .white.opacity(0.85), radius: 5)
-        .shadow(color: .white.opacity(0.35), radius: 12)
-        .offset(y: bounce ? (pointsUp ? -6 : 6) : 0)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.65).repeatForever(autoreverses: true)) {
-                bounce = true
-            }
->>>>>>> theirs
         }
     }
 }
@@ -259,26 +212,16 @@ struct OnboardingView: View {
 
     private func positionedBubble(_ step: TutorialStep, geo: GeometryProxy) -> some View {
         let bubbleW: CGFloat = min(geo.size.width - 56, 300)
-<<<<<<< ours
         // Total estimated frame height: body content (~215pt) + tail (12pt)
         let frameH: CGFloat = 227
 
         let (centerX, centerY, tailPointsUp): (CGFloat, CGFloat, Bool) = {
             guard let target = step.target else {
                 return (geo.size.width / 2, geo.size.height / 2, false)
-=======
-        // Total estimated frame height: body content (~215pt) + tail (18pt)
-        let frameH: CGFloat = 233
-
-        let (centerX, centerY, tailPointsUp, optTipY): (CGFloat, CGFloat, Bool, CGFloat?) = {
-            guard let target = step.target else {
-                return (geo.size.width / 2, geo.size.height / 2, false, nil)
->>>>>>> theirs
             }
             let tipY = tailTipY(target, geo: geo)
             switch target {
             case .prayerInput:
-<<<<<<< ours
                 // Tail at bubble bottom, tip points down to input top
                 return (geo.size.width / 2, tipY - frameH / 2, false)
             case .incenseStick:
@@ -340,78 +283,6 @@ struct OnboardingView: View {
             let stickTop   = holderTop - stickH
             return stickTop + stickH * 0.5
 
-=======
-                return (geo.size.width / 2, tipY - frameH / 2, false, tipY)
-            case .incenseStick:
-                return (geo.size.width / 2, tipY + frameH / 2, true, tipY)
-            }
-        }()
-
-        return Group {
-            BubbleCard(
-                title: step.title,
-                description: step.description,
-                totalSteps: steps.count,
-                currentStep: currentStep,
-                tailPointsUp: tailPointsUp,
-                hasTail: step.target != nil,
-                onNext: advance
-            )
-            .frame(width: bubbleW)
-            .position(x: centerX, y: centerY)
-
-            // Bouncing chevron just beyond the tail tip
-            if let tipY = optTipY {
-                BouncingArrow(pointsUp: tailPointsUp)
-                    .position(
-                        x: geo.size.width / 2,
-                        y: tailPointsUp ? tipY - 22 : tipY + 22
-                    )
-            }
-        }
-    }
-
-    private func scaleAnchor(_ step: TutorialStep) -> UnitPoint {
-        switch step.target {
-        case .prayerInput:  .bottom
-        case .incenseStick: .top
-        case nil:           .center
-        }
-    }
-
-    // MARK: - Tail Tip Coordinate
-    //
-    // ContentView layout (inside safe area):
-    //   Spacer() [flex]
-    //   IncenseCanvasView  height = 340
-    //   Spacer(height: 28)
-    //   PrayerInputView    height ≈ 55
-    //   Spacer() [flex]
-
-    private func tailTipY(_ target: TutorialTarget, geo: GeometryProxy) -> CGFloat {
-        let safeTop    = geo.safeAreaInsets.top
-        let safeBottom = geo.safeAreaInsets.bottom
-        let totalH     = geo.size.height
-
-        let canvasH: CGFloat = 340
-        let holderH: CGFloat = 50
-        let stickH:  CGFloat = 200
-        let gapH:    CGFloat = 28
-        let inputH:  CGFloat = 55
-
-        let usable    = totalH - safeTop - safeBottom
-        let fixed     = canvasH + gapH + inputH
-        let spacer    = max(0, (usable - fixed) / 2)
-        let canvasTop = safeTop + spacer
-
-        switch target {
-        case .incenseStick:
-            // Point to the center of the center incense stick
-            let holderTop  = canvasTop + canvasH - holderH
-            let stickTop   = holderTop - stickH
-            return stickTop + stickH * 0.5
-
->>>>>>> theirs
         case .prayerInput:
             // Point to the top of the prayer input field
             return canvasTop + canvasH + gapH
