@@ -13,7 +13,7 @@ enum BurnState: Equatable {
 @Observable
 final class BurnSession {
     static let burnDuration: TimeInterval = 1260  // 21 minutes
-    // static let burnDuration: TimeInterval = 20  // 21 minutes
+    // static let burnDuration: TimeInterval = 10
 
     var state: BurnState = .idle
     var prayerText: String = ""
