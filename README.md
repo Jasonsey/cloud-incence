@@ -10,6 +10,7 @@
   [![Platform](https://img.shields.io/badge/platform-iOS%2026%2B%20%7C%20macOS%2026%2B%20%7C%20visionOS%2026%2B-black?style=flat-square)](https://developer.apple.com/swift/)
   [![Swift](https://img.shields.io/badge/Swift-6-f05138?style=flat-square&logo=swift)](https://swift.org)
   [![License](https://img.shields.io/badge/license-Apache%202.0-white?style=flat-square)](LICENSE)
+  [![App Store](https://img.shields.io/badge/App%20Store-云香-black?style=flat-square&logo=apple)](https://apps.apple.com/cn/app/%E4%BA%91%E9%A6%99/id6762236822)
 </div>
 
 ---
